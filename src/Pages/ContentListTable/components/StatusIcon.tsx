@@ -21,7 +21,7 @@ import {
 } from '@patternfly/react-tokens';
 import { createUseStyles } from 'react-jss';
 import dayjs from 'dayjs';
-import relativeTime = require('dayjs/plugin/relativeTime');
+import relativeTime from 'dayjs/plugin/relativeTime';
 import { ContentItem } from '../../../services/Content/ContentApi';
 import ConditionalTooltip from '../../../components/ConditionalTooltip/ConditionalTooltip';
 import { useAppContext } from '../../../middleware/AppContext';

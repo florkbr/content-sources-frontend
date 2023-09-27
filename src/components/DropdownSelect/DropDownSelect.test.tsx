@@ -1,4 +1,6 @@
-import { SelectVariant } from '@patternfly/react-core';
+import {
+	SelectVariant
+} from '@patternfly/react-core/deprecated';
 import { render } from '@testing-library/react';
 import DropDownSelect from './DropdownSelect';
 

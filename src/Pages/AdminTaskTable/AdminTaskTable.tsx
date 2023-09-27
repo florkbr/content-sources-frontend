@@ -4,14 +4,12 @@ import {
   Flex,
   FlexItem,
   Grid,
-  OnPerPageSelect,
-  OnSetPage,
   Pagination,
   PaginationVariant,
   Spinner,
 } from '@patternfly/react-core';
 import {
-  TableComposable,
+  Table /* data-codemods */,
   TableVariant,
   Tbody,
   Td,
@@ -106,9 +104,9 @@ const AdminTaskTable = () => {
 
   const actionTakingPlace = isFetching;
 
-  const onSetPage: OnSetPage = (_, newPage) => setPage(newPage);
+  const onSetPage = (_, newPage) => setPage(newPage);
 
-  const onPerPageSelect: OnPerPageSelect = (_, newPerPage, newPage) => {
+  const onPerPageSelect = (_, newPerPage, newPage) => {
     // Save this value through page refresh for use on next reload
     localStorage.setItem(perPageKey, newPerPage.toString());
     setPerPage(newPerPage);
@@ -176,7 +174,6 @@ const AdminTaskTable = () => {
             <Pagination
               id='top-pagination-id'
               widgetId='topPaginationWidgetId'
-              perPageComponent='button'
               isDisabled={isLoading}
               itemCount={count}
               perPage={perPage}
@@ -191,19 +188,15 @@ const AdminTaskTable = () => {
       <Hide hide={!isLoading}>
         <Grid className={classes.mainContainer}>
           <SkeletonTable
-            rowSize={perPage}
-            colSize={columnHeaders.length}
+            rows={perPage}
+            numberOfColumns={columnHeaders.length}
             variant={TableVariant.compact}
           />
         </Grid>
       </Hide>
       <Hide hide={countIsZero || isLoading}>
         <>
-          <TableComposable
-            aria-label='Admin tasks table'
-            ouiaId='admin_tasks_table'
-            variant='compact'
-          >
+          <Table aria-label='Admin tasks table' ouiaId='admin_tasks_table' variant='compact'>
             <Thead>
               <Tr>
                 {columnHeaders.map((columnHeader, index) => (
@@ -238,14 +231,13 @@ const AdminTaskTable = () => {
                 </Tr>
               ))}
             </Tbody>
-          </TableComposable>
+          </Table>
           <Flex className={classes.bottomContainer}>
             <FlexItem />
             <FlexItem>
               <Pagination
                 id='bottom-pagination-id'
                 widgetId='bottomPaginationWidgetId'
-                perPageComponent='button'
                 itemCount={count}
                 perPage={perPage}
                 page={page}

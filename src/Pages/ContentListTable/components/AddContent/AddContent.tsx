@@ -8,19 +8,19 @@ import {
   ModalVariant,
   Popover,
   Radio,
-  SelectVariant,
   Stack,
   StackItem,
   TextInput,
   Tooltip,
   Alert,
 } from '@patternfly/react-core';
+import { SelectVariant } from '@patternfly/react-core/deprecated';
 import {
   OutlinedQuestionCircleIcon,
   PlusCircleIcon,
   MinusCircleIcon,
 } from '@patternfly/react-icons';
-import { TableComposable, Tbody, Td, Tr } from '@patternfly/react-table';
+import { Table /* data-codemods */, Tbody, Td, Tr } from '@patternfly/react-table';
 import { global_Color_200, global_link_Color } from '@patternfly/react-tokens';
 import { useFormik } from 'formik';
 import { useEffect, useMemo, useState } from 'react';
@@ -443,7 +443,7 @@ const AddContent = () => {
         </Stack>
       }
     >
-      <TableComposable aria-label='Table for repo add modal' ouiaId='add_modal_table'>
+      <Table aria-label='Table for repo add modal' ouiaId='add_modal_table'>
         <Hide hide={createDataLengthOf1}>
           <Tbody isExpanded={allExpanded}>
             <Tr onClick={expandAllToggle} className={classes.toggleAllRow}>
@@ -549,8 +549,8 @@ const AddContent = () => {
                       label='Name'
                       isRequired
                       fieldId='namegroup'
-                      validated={getFieldValidation(index, 'name')}
-                      helperTextInvalid={formik.errors[index]?.name}
+                      //   validated={getFieldValidation(index, 'name')} TODO:
+                      //   helperTextInvalid={formik.errors[index]?.name}
                     >
                       <TextInput
                         isRequired
@@ -560,7 +560,7 @@ const AddContent = () => {
                         ouiaId='input_name'
                         type='text'
                         validated={getFieldValidation(index, 'name')}
-                        onChange={(value) => {
+                        onChange={(_event, value) => {
                           updateVariable(index, { name: value });
                         }}
                         value={name || ''}
@@ -571,15 +571,15 @@ const AddContent = () => {
                       label='URL'
                       isRequired
                       fieldId='url'
-                      validated={getFieldValidation(index, 'url')}
-                      helperTextInvalid={formik.errors[index]?.url}
+                      //   validated={getFieldValidation(index, 'url')} TODO:
+                      //   helperTextInvalid={formik.errors[index]?.url}
                     >
                       <TextInput
                         isRequired
                         type='url'
                         validated={getFieldValidation(index, 'url')}
                         onBlur={() => updateArchAndVersion(index)}
-                        onChange={(value) => {
+                        onChange={(_event, value) => {
                           if (url !== value) {
                             updateVariable(index, { url: value });
                           }
@@ -638,8 +638,8 @@ const AddContent = () => {
                         toggleId={'versionSelection' + index}
                         options={Object.keys(distributionVersions)}
                         variant={SelectVariant.typeaheadMulti}
-                        selectedProp={Object.keys(distributionVersions).filter((key: string) =>
-                          versions?.includes(distributionVersions[key]),
+                        selectedProp={Object.keys(distributionVersions).filter(
+                          (key: string) => versions?.includes(distributionVersions[key]),
                         )}
                         placeholderText={versions?.length ? '' : 'Any version'}
                         setSelected={(value) => setVersionSelected(value, index)}
@@ -656,8 +656,8 @@ const AddContent = () => {
                         </Tooltip>
                       }
                       fieldId='gpgKey'
-                      validated={getFieldValidation(index, 'gpgKey')}
-                      helperTextInvalid={formik.errors[index]?.gpgKey}
+                      //   validated={getFieldValidation(index, 'gpgKey')} TODO:
+                      //   helperTextInvalid={formik.errors[index]?.gpgKey}
                     >
                       <FileUpload
                         className={classes.gpgKeyInput}
@@ -670,8 +670,8 @@ const AddContent = () => {
                         value={gpgKeyList[index]}
                         isLoading={gpgLoading}
                         spellCheck={false}
-                        onDataChange={(value) => updateGpgKey(index, value)}
-                        onTextChange={(value) => updateGpgKey(index, value)}
+                        onDataChange={(_event, value) => updateGpgKey(index, value)}
+                        onTextChange={(_event, value) => updateGpgKey(index, value)}
                         onClearClick={() => updateGpgKey(index, '')}
                         dropzoneProps={{
                           maxSize: maxUploadSize,
@@ -710,7 +710,7 @@ const AddContent = () => {
             </Tbody>
           ),
         )}
-      </TableComposable>
+      </Table>
     </Modal>
   );
 };

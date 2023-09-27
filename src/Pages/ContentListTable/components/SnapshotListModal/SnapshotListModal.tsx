@@ -3,16 +3,16 @@ import {
   Flex,
   FlexItem,
   Grid,
+  Icon,
   Modal,
   ModalVariant,
-  OnPerPageSelect,
-  OnSetPage,
   Pagination,
   PaginationVariant,
+  TextInput,
 } from '@patternfly/react-core';
 import {
   InnerScrollContainer,
-  TableComposable,
+  Table /* data-codemods */,
   TableVariant,
   Tbody,
   Td,
@@ -37,6 +37,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import useRootPath from '../../../../Hooks/useRootPath';
 import EmptyPackageState from '../PackageModal/components/EmptyPackageState';
 import ChangedArrows from './components/ChangedArrows';
+import { SearchIcon } from '@patternfly/react-icons';
 
 const useStyles = createUseStyles({
   description: {
@@ -116,9 +117,9 @@ export default function SnapshotListModal() {
     }
   }, [isError]);
 
-  const onSetPage: OnSetPage = (_, newPage) => setPage(newPage);
+  const onSetPage = (_, newPage) => setPage(newPage);
 
-  const onPerPageSelect: OnPerPageSelect = (_, newPerPage, newPage) => {
+  const onPerPageSelect = (_, newPerPage, newPage) => {
     // Save this value through page refresh for use on next reload
     setPerPage(newPerPage);
     setPage(newPage);
@@ -183,22 +184,23 @@ export default function SnapshotListModal() {
         <Grid className={classes.mainContainer}>
           <Flex className={classes.topContainer}>
             <FlexItem>
-              {/* <TextInput
+              <TextInput
                 id='search'
                 ouiaId='name_search'
                 placeholder='Search snapshot'
                 value={searchQuery}
-                onChange={(value) => setSearchQuery(value)}
+                onChange={(_, value) => setSearchQuery(value)}
                 className={classes.searchInput}
               />
-              <SearchIcon size='sm' className={classes.searchIcon} /> */}
+              <Icon size='sm'>
+                <SearchIcon className={classes.searchIcon} />
+              </Icon>
             </FlexItem>
             <FlexItem>
               <Hide hide={loadingOrZeroCount}>
                 <Pagination
                   id='top-pagination-id'
                   widgetId='topPaginationWidgetId'
-                  perPageComponent='button'
                   itemCount={count}
                   perPage={perPage}
                   page={page}
@@ -212,18 +214,14 @@ export default function SnapshotListModal() {
           <Hide hide={!fetchingOrLoading}>
             <Grid className={classes.mainContainer}>
               <SkeletonTable
-                rowSize={perPage}
-                colSize={columnHeaders.length}
+                rows={perPage}
+                numberOfColumns={columnHeaders.length}
                 variant={TableVariant.compact}
               />
             </Grid>
           </Hide>
           <Hide hide={fetchingOrLoading}>
-            <TableComposable
-              aria-label='snapshot list table'
-              ouiaId='snapshot_list_table'
-              variant='compact'
-            >
+            <Table aria-label='snapshot list table' ouiaId='snapshot_list_table' variant='compact'>
               <Hide hide={loadingOrZeroCount}>
                 <Thead>
                   <Tr>
@@ -267,7 +265,7 @@ export default function SnapshotListModal() {
                   <EmptyPackageState clearSearch={() => setSearchQuery('')} />
                 </Hide>
               </Tbody>
-            </TableComposable>
+            </Table>
           </Hide>
           <Flex className={classes.bottomContainer}>
             <FlexItem />
@@ -276,7 +274,6 @@ export default function SnapshotListModal() {
                 <Pagination
                   id='bottom-pagination-id'
                   widgetId='bottomPaginationWidgetId'
-                  perPageComponent='button'
                   itemCount={count}
                   perPage={perPage}
                   page={page}

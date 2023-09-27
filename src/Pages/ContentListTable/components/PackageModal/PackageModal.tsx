@@ -3,17 +3,16 @@ import {
   Flex,
   FlexItem,
   Grid,
+  Icon,
   Modal,
   ModalVariant,
-  OnPerPageSelect,
-  OnSetPage,
   Pagination,
   PaginationVariant,
   TextInput,
 } from '@patternfly/react-core';
 import {
   InnerScrollContainer,
-  TableComposable,
+  Table /* data-codemods */,
   TableVariant,
   Tbody,
   Td,
@@ -115,11 +114,10 @@ export default function PackageModal() {
     }
   }, [isError]);
 
-  const onSetPage: OnSetPage = (_, newPage) => setPage(newPage);
+  const onSetPage = (_, newPage) => setPage(newPage);
 
-  const onPerPageSelect: OnPerPageSelect = (_, newPerPage, newPage) => {
+  const onPerPageSelect = (_, newPerPage, newPage) => {
     // Save this value through page refresh for use on next reload
-
     setPerPage(newPerPage);
     setPage(newPage);
     localStorage.setItem(perPageKey, newPerPage.toString());
@@ -180,17 +178,18 @@ export default function PackageModal() {
                 ouiaId='name_search'
                 placeholder='Filter by name'
                 value={searchQuery}
-                onChange={(value) => setSearchQuery(value)}
+                onChange={(_event, value) => setSearchQuery(value)}
                 className={classes.searchInput}
               />
-              <SearchIcon size='sm' className={classes.searchIcon} />
+              <Icon size='sm'>
+                <SearchIcon className={classes.searchIcon} />
+              </Icon>
             </Flex>
             <FlexItem>
               <Hide hide={loadingOrZeroCount}>
                 <Pagination
                   id='top-pagination-id'
                   widgetId='topPaginationWidgetId'
-                  perPageComponent='button'
                   itemCount={count}
                   perPage={perPage}
                   page={page}
@@ -204,18 +203,14 @@ export default function PackageModal() {
           <Hide hide={!fetchingOrLoading}>
             <Grid className={classes.mainContainer}>
               <SkeletonTable
-                rowSize={perPage}
-                colSize={columnHeaders.length}
+                rows={perPage}
+                numberOfColumns={columnHeaders.length}
                 variant={TableVariant.compact}
               />
             </Grid>
           </Hide>
           <Hide hide={fetchingOrLoading}>
-            <TableComposable
-              aria-label='Custom repositories table'
-              ouiaId='packages_table'
-              variant='compact'
-            >
+            <Table aria-label='Custom repositories table' ouiaId='packages_table' variant='compact'>
               <Hide hide={loadingOrZeroCount}>
                 <Thead>
                   <Tr>
@@ -243,7 +238,7 @@ export default function PackageModal() {
                   <EmptyPackageState clearSearch={() => setSearchQuery('')} />
                 </Hide>
               </Tbody>
-            </TableComposable>
+            </Table>
           </Hide>
           <Flex className={classes.bottomContainer}>
             <FlexItem />
@@ -252,7 +247,6 @@ export default function PackageModal() {
                 <Pagination
                   id='bottom-pagination-id'
                   widgetId='bottomPaginationWidgetId'
-                  perPageComponent='button'
                   itemCount={count}
                   perPage={perPage}
                   page={page}

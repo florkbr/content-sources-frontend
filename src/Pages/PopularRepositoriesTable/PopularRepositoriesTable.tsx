@@ -4,14 +4,22 @@ import {
   FlexItem,
   Grid,
   InputGroup,
-  OnPerPageSelect,
-  OnSetPage,
   Pagination,
   PaginationVariant,
   Spinner,
   TextInput,
+  InputGroupItem,
+  Icon,
 } from '@patternfly/react-core';
-import { TableComposable, TableVariant, Tbody, Td, Th, Thead, Tr } from '@patternfly/react-table';
+import {
+  Table /* data-codemods */,
+  TableVariant,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
+} from '@patternfly/react-table';
 import {
   global_BackgroundColor_100,
   global_secondary_color_100,
@@ -263,9 +271,9 @@ const PopularRepositoriesTable = () => {
   const actionTakingPlace =
     isDeleting || isFetching || repositoryParamsLoading || isAdding || isDeletingItems;
 
-  const onSetPage: OnSetPage = (_, newPage) => setPage(newPage);
+  const onSetPage = (_, newPage) => setPage(newPage);
 
-  const onPerPageSelect: OnPerPageSelect = (_, newPerPage, newPage) => {
+  const onPerPageSelect = (_, newPerPage, newPage) => {
     // Save this value through page refresh for use on next reload
     localStorage.setItem(perPageKey, newPerPage.toString());
     setPerPage(newPerPage);
@@ -312,51 +320,57 @@ const PopularRepositoriesTable = () => {
       <Flex className={classes.topContainer}>
         <FlexItem>
           <InputGroup>
-            <FlexItem>
-              <TextInput
-                isDisabled={isLoading}
-                id='search'
-                ouiaId='popular_filter_search'
-                placeholder='Filter by name/url'
-                value={searchValue}
-                onChange={setSearchValue}
-                className={classes.searchInput}
-              />
-              <SearchIcon size='sm' className={classes.searchIcon} />
-            </FlexItem>
-            <FlexItem className={classes.repositoryActions}>
-              {/* RBAC popover takes precedence */}
-              <ConditionalTooltip
-                content={
-                  !rbac?.write
-                    ? 'You do not have the required permissions to perform this action.'
-                    : 'Make a selection below to add multiple repositories'
-                }
-                show={!rbac?.write || !atLeastOneRepoToAddChecked}
-                setDisabled
-              >
-                <Button
-                  onClick={addSelected}
-                  className={classes.addRepositoriesButton}
-                  ouiaId='add_checked_repos'
-                >
-                  {atLeastOneRepoToAddChecked
-                    ? `Add ${checkedRepositoriesToAdd.size} repositories`
-                    : 'Add selected repositories'}
-                </Button>
-              </ConditionalTooltip>
-              <ConditionalTooltip
-                content='You do not have the required permissions to perform this action.'
-                show={!rbac?.write}
-                setDisabled
-              >
-                <DeleteKebab
-                  atLeastOneRepoChecked={atLeastOneRepoToDeleteChecked}
-                  numberOfReposChecked={checkedRepositoriesToDelete.size}
-                  deleteCheckedRepos={deleteSelected}
+            <InputGroupItem>
+              <FlexItem>
+                <TextInput
+                  isDisabled={isLoading}
+                  id='search'
+                  ouiaId='popular_filter_search'
+                  placeholder='Filter by name/url'
+                  value={searchValue}
+                  onChange={(_event, val) => setSearchValue(val)}
+                  className={classes.searchInput}
                 />
-              </ConditionalTooltip>
-            </FlexItem>
+                <Icon size='sm'>
+                  <SearchIcon className={classes.searchIcon} />
+                </Icon>
+              </FlexItem>
+            </InputGroupItem>
+            <InputGroupItem>
+              <FlexItem className={classes.repositoryActions}>
+                {/* RBAC popover takes precedence */}
+                <ConditionalTooltip
+                  content={
+                    !rbac?.write
+                      ? 'You do not have the required permissions to perform this action.'
+                      : 'Make a selection below to add multiple repositories'
+                  }
+                  show={!rbac?.write || !atLeastOneRepoToAddChecked}
+                  setDisabled
+                >
+                  <Button
+                    onClick={addSelected}
+                    className={classes.addRepositoriesButton}
+                    ouiaId='add_checked_repos'
+                  >
+                    {atLeastOneRepoToAddChecked
+                      ? `Add ${checkedRepositoriesToAdd.size} repositories`
+                      : 'Add selected repositories'}
+                  </Button>
+                </ConditionalTooltip>
+                <ConditionalTooltip
+                  content='You do not have the required permissions to perform this action.'
+                  show={!rbac?.write}
+                  setDisabled
+                >
+                  <DeleteKebab
+                    atLeastOneRepoChecked={atLeastOneRepoToDeleteChecked}
+                    numberOfReposChecked={checkedRepositoriesToDelete.size}
+                    deleteCheckedRepos={deleteSelected}
+                  />
+                </ConditionalTooltip>
+              </FlexItem>
+            </InputGroupItem>
           </InputGroup>
         </FlexItem>
         <FlexItem>
@@ -364,7 +378,6 @@ const PopularRepositoriesTable = () => {
             <Pagination
               id='top-pagination-id'
               widgetId='topPaginationWidgetId'
-              perPageComponent='button'
               isDisabled={isLoading}
               itemCount={count}
               perPage={perPage}
@@ -379,15 +392,15 @@ const PopularRepositoriesTable = () => {
       <Hide hide={!isLoading}>
         <Grid className={classes.mainContainer}>
           <SkeletonTable
-            rowSize={perPage}
-            colSize={columnHeaders.length}
+            rows={perPage}
+            numberOfColumns={columnHeaders.length}
             variant={TableVariant.compact}
           />
         </Grid>
       </Hide>
       <Hide hide={isLoading || countIsZero}>
         <>
-          <TableComposable
+          <Table
             aria-label='Popular repositories table'
             ouiaId='popular_repos_table'
             variant='compact'
@@ -499,7 +512,7 @@ const PopularRepositoriesTable = () => {
                 );
               })}
             </Tbody>
-          </TableComposable>
+          </Table>
           <Hide hide={isLoading || countIsZero}>
             <Flex className={classes.bottomContainer}>
               <FlexItem />
@@ -507,7 +520,6 @@ const PopularRepositoriesTable = () => {
                 <Pagination
                   id='bottom-pagination-id'
                   widgetId='bottomPaginationWidgetId'
-                  perPageComponent='button'
                   itemCount={count}
                   perPage={perPage}
                   page={page}

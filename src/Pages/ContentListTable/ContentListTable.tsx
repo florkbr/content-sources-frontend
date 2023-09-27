@@ -4,8 +4,6 @@ import {
   Flex,
   FlexItem,
   Grid,
-  OnPerPageSelect,
-  OnSetPage,
   Pagination,
   PaginationVariant,
   Spinner,
@@ -13,7 +11,7 @@ import {
 import {
   ActionsColumn,
   IAction,
-  TableComposable,
+  Table /* data-codemods */,
   TableVariant,
   Tbody,
   Td,
@@ -165,9 +163,9 @@ const ContentListTable = () => {
   const actionTakingPlace =
     isDeleting || isFetching || repositoryParamsLoading || isIntrospecting || isDeletingItems;
 
-  const onSetPage: OnSetPage = (_, newPage) => setPage(newPage);
+  const onSetPage = (_, newPage) => setPage(newPage);
 
-  const onPerPageSelect: OnPerPageSelect = (_, newPerPage, newPage) => {
+  const onPerPageSelect = (_, newPerPage, newPage) => {
     // Save this value through page refresh for use on next reload
     localStorage.setItem(perPageKey, newPerPage.toString());
     setPerPage(newPerPage);
@@ -379,7 +377,6 @@ const ContentListTable = () => {
                 <Pagination
                   id='top-pagination-id'
                   widgetId='topPaginationWidgetId'
-                  perPageComponent='button'
                   isDisabled={isLoading}
                   itemCount={count}
                   perPage={perPage}
@@ -394,15 +391,15 @@ const ContentListTable = () => {
           <Hide hide={!isLoading}>
             <Grid className={classes.mainContainer}>
               <SkeletonTable
-                rowSize={perPage}
-                colSize={columnHeaders.length}
+                rows={perPage}
+                numberOfColumns={columnHeaders.length}
                 variant={TableVariant.compact}
               />
             </Grid>
           </Hide>
           <Hide hide={countIsZero || isLoading}>
             <>
-              <TableComposable
+              <Table
                 aria-label='Custom repositories table'
                 ouiaId='custom_repositories_table'
                 variant='compact'
@@ -448,7 +445,7 @@ const ContentListTable = () => {
                               onSelect: (_event, isSelecting) =>
                                 onSelectRepo(rowData.uuid, isSelecting),
                               isSelected: checkedRepositories.has(rowData.uuid),
-                              disable: !repoCanBeChecked(rowData),
+                              isDisabled: !repoCanBeChecked(rowData),
                             }}
                           />
                         </Hide>
@@ -483,14 +480,13 @@ const ContentListTable = () => {
                     );
                   })}
                 </Tbody>
-              </TableComposable>
+              </Table>
               <Flex className={classes.bottomContainer}>
                 <FlexItem />
                 <FlexItem>
                   <Pagination
                     id='bottom-pagination-id'
                     widgetId='bottomPaginationWidgetId'
-                    perPageComponent='button'
                     itemCount={count}
                     perPage={perPage}
                     page={page}

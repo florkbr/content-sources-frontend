@@ -21,14 +21,6 @@ const useStyles = createUseStyles({
   },
 });
 
-interface QuickStarts {
-  version: number;
-  updateQuickStarts: (key: string, quickstarts: unknown[]) => void;
-  toggle: (quickstartId: string) => void;
-  Catalog: unknown;
-  activateQuickstart: (key: string) => Promise<void>;
-}
-
 const quickStartExpandedKey = 'QUICKSTART_EXPANDED';
 
 export default function QuickStart() {
@@ -56,7 +48,7 @@ export default function QuickStart() {
   const activateQuickStart = async () => {
     setQuickStartLoading(true);
     try {
-      await (quickStarts as QuickStarts)?.activateQuickstart('insights-custom-repos');
+      await quickStarts?.activateQuickstart('insights-custom-repos');
       onToggle();
     } catch (error) {
       console.warn(error);
@@ -70,7 +62,7 @@ export default function QuickStart() {
         toggleText='Need help getting started with Preview features?'
         onToggle={onToggle}
         isExpanded={isExpanded}
-        displaySize='large'
+        displaySize='lg'
         aria-label='quickStart-expansion'
         data-ouia-component-id='quickstart_expand'
       >

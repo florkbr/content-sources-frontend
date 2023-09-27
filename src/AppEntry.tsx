@@ -5,7 +5,7 @@ import * as Redux from 'redux';
 
 import App from './App';
 import { ContextProvider } from './middleware/AppContext';
-import { createStore, resetStore } from './store';
+import { createStore, restoreStore } from './store';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -21,7 +21,7 @@ interface AppEntryProps {
 
 export default function AppEntry({ logger }: AppEntryProps) {
   const store = React.useMemo(() => {
-    resetStore();
+    restoreStore();
     if (logger) {
       return createStore(logger).store;
     }

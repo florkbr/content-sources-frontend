@@ -1,4 +1,10 @@
-import { Select, SelectOption, SelectProps, SelectVariant } from '@patternfly/react-core';
+import {
+  Select,
+  SelectOption,
+  SelectProps,
+  SelectVariant,
+} from '@patternfly/react-core/deprecated';
+
 import React, { Dispatch, SetStateAction, useState } from 'react';
 
 interface DropdownSelectProps extends Partial<SelectProps> {
@@ -57,7 +63,7 @@ const DropdownSelect = ({
       onSelect={onSelect}
       selections={selected}
       isOpen={isOpen}
-      onToggle={onToggle}
+      onToggle={(_event, isOpen) => onToggle(isOpen)}
       placeholderText={placeholderText}
       isCheckboxSelectionBadgeHidden
       toggleIcon={toggleIcon}

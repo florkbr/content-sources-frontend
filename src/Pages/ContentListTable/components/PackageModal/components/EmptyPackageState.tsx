@@ -2,10 +2,9 @@ import {
   EmptyStateBody,
   EmptyState,
   EmptyStateVariant,
-  Title,
   EmptyStateIcon,
   Button,
-  Bullseye,
+  Bullseye, EmptyStateHeader, EmptyStateFooter,
 } from '@patternfly/react-core';
 import { SearchIcon } from '@patternfly/react-icons/dist/js/icons';
 import { Td, Tr } from '@patternfly/react-table';
@@ -30,15 +29,12 @@ export default function EmptyPackageState({ clearSearch }: Props) {
       <Td colSpan={4}>
         <Bullseye>
           <EmptyState variant={EmptyStateVariant.full} className={classes.emptyStateContainer}>
-            <EmptyStateIcon icon={SearchIcon} />
-            <Title headingLevel='h2' size='lg'>
-              No packages match the search criteria
-            </Title>
-            <EmptyStateBody>Clear your current search to show more results</EmptyStateBody>
+            <EmptyStateHeader titleText="No packages match the search criteria" icon={<EmptyStateIcon icon={SearchIcon} />} headingLevel='h2' />
+            <EmptyStateBody>Clear your current search to show more results</EmptyStateBody><EmptyStateFooter>
             <Button ouiaId='clear_filters' variant='link' onClick={clearSearch}>
               Clear search
             </Button>
-          </EmptyState>
+          </EmptyStateFooter></EmptyState>
         </Bullseye>
       </Td>
     </Tr>

@@ -6,6 +6,24 @@ import { NotificationPayload } from '../../../../Hooks/useNotification';
 import ERROR_CODE from './httpErrorCodes.json';
 import { AlertVariant } from '@patternfly/react-core';
 
+
+export enum ErrorCode {
+    FileInvalidType = 'file-invalid-type',
+    FileTooLarge = 'file-too-large',
+    FileTooSmall = 'file-too-small',
+    TooManyFiles = 'too-many-files',
+  }
+  
+  export interface FileError {
+    message: string;
+    code: ErrorCode | string;
+  }
+  
+  export interface FileRejection {
+    file: File;
+    errors: FileError[];
+  }
+
 export interface FormikValues {
   name: string;
   url: string;
@@ -119,11 +137,12 @@ export const makeValidationSchema = () => {
 };
 
 export const maxUploadSize = 32000;
-export const failedFileUpload = (files: File[], notify: (arg: NotificationPayload) => void) => {
+// TODO: check this is working
+export const failedFileUpload = (files: FileRejection[], notify: (arg: NotificationPayload) => void) => {
   let description = 'Check the file and try again.';
   if (files.length != 1) {
     description = 'Only a single file upload is supported.';
-  } else if (files[0].size > maxUploadSize) {
+  } else if (files[0].file.size > maxUploadSize) {
     description = 'The file is larger than ' + maxUploadSize + ' bytes.';
   }
   notify({

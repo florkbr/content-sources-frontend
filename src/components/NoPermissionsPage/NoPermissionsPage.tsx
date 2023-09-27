@@ -3,9 +3,8 @@ import {
   EmptyStateBody,
   EmptyStateIcon,
   EmptyStateVariant,
-  Grid,
-  Title,
-} from '@patternfly/react-core';
+  Grid, EmptyStateHeader,
+  } from '@patternfly/react-core';
 import { LockIcon } from '@patternfly/react-icons';
 import {
   PageHeader as _PageHeader,
@@ -24,10 +23,7 @@ export const NoPermissionsPage: React.FunctionComponent = () => (
     </PageHeader>
     <Grid style={{ margin: '24px' }}>
       <EmptyState variant={EmptyStateVariant.full}>
-        <EmptyStateIcon icon={LockIcon} />
-        <Title headingLevel='h5' size='lg'>
-          You do not have access to Repositories
-        </Title>
+        <EmptyStateHeader titleText="You do not have access to Repositories" icon={<EmptyStateIcon icon={LockIcon} />} headingLevel='h5' />
         <EmptyStateBody>
           Contact your organization administrator(s) for more information.
         </EmptyStateBody>

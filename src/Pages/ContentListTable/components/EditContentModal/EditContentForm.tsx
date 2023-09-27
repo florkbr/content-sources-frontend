@@ -4,13 +4,13 @@ import {
   Form,
   FormGroup,
   Radio,
-  SelectVariant,
   TextInput,
   Switch,
   Tooltip,
 } from '@patternfly/react-core';
+import { SelectVariant } from '@patternfly/react-core/deprecated';
 import { CheckCircleIcon, OutlinedQuestionCircleIcon } from '@patternfly/react-icons';
-import { TableComposable, Tbody, Td, Tr } from '@patternfly/react-table';
+import { Table /* data-codemods */, Tbody, Td, Tr } from '@patternfly/react-table';
 import {
   global_Color_200,
   global_success_color_100,
@@ -325,7 +325,7 @@ const EditContentForm = ({
   }, [formik.values]);
 
   return (
-    <TableComposable aria-label='Table for edit modal' ouiaId='edit_modal_table'>
+    <Table aria-label='Table for edit modal' ouiaId='edit_modal_table'>
       <Hide hide={createDataLengthOf1}>
         <Tbody isExpanded={allExpanded}>
           <Tr onClick={expandAllToggle} className={classes.toggleAllRow}>
@@ -415,8 +415,8 @@ const EditContentForm = ({
                     label='Name'
                     isRequired
                     fieldId='namegroup'
-                    validated={getFieldValidation(index, 'name')}
-                    helperTextInvalid={formik.errors[index]?.name}
+                    // validated={getFieldValidation(index, 'name')}TODO:
+                    // helperTextInvalid={formik.errors[index]?.name}
                   >
                     <TextInput
                       isRequired
@@ -426,7 +426,7 @@ const EditContentForm = ({
                       ouiaId='input_name'
                       type='text'
                       validated={getFieldValidation(index, 'name')}
-                      onChange={(value) => {
+                      onChange={(_event, value) => {
                         updateVariable(index, { name: value });
                       }}
                       value={name || ''}
@@ -437,15 +437,15 @@ const EditContentForm = ({
                     label='URL'
                     isRequired
                     fieldId='url'
-                    validated={getFieldValidation(index, 'url')}
-                    helperTextInvalid={formik.errors[index]?.url}
+                    // validated={getFieldValidation(index, 'url')}TODO:
+                    // helperTextInvalid={formik.errors[index]?.url}
                   >
                     <TextInput
                       isRequired
                       type='url'
                       validated={getFieldValidation(index, 'url')}
                       onBlur={() => urlOnBlur(index)}
-                      onChange={(value) => {
+                      onChange={(_event, value) => {
                         if (url !== value) {
                           updateVariable(index, { url: value });
                         }
@@ -506,8 +506,8 @@ const EditContentForm = ({
                       toggleId={'versionSelection' + index}
                       options={Object.keys(distributionVersions)}
                       variant={SelectVariant.typeaheadMulti}
-                      selectedProp={Object.keys(distributionVersions).filter((key: string) =>
-                        versions?.includes(distributionVersions[key]),
+                      selectedProp={Object.keys(distributionVersions).filter(
+                        (key: string) => versions?.includes(distributionVersions[key]),
                       )}
                       placeholderText={versions?.length ? '' : 'Any version'}
                       setSelected={(value) => setVersionSelected(value, index)}
@@ -524,8 +524,8 @@ const EditContentForm = ({
                       </Tooltip>
                     }
                     fieldId='gpgKey'
-                    validated={getFieldValidation(index, 'gpgKey')}
-                    helperTextInvalid={formik.errors[index]?.gpgKey}
+                    // validated={getFieldValidation(index, 'gpgKey')}
+                    // helperTextInvalid={formik.errors[index]?.gpgKey} TODO:
                   >
                     <FileUpload
                       className={classes.gpgKeyInput}
@@ -538,8 +538,8 @@ const EditContentForm = ({
                       value={gpgKeyList[index]}
                       isLoading={gpgLoading}
                       spellCheck={false}
-                      onDataChange={(value) => updateGpgKey(index, value)}
-                      onTextChange={(value) => updateGpgKey(index, value)}
+                      onDataChange={(_event, value) => updateGpgKey(index, value)}
+                      onTextChange={(_event, value) => updateGpgKey(index, value)}
                       onClearClick={() => updateGpgKey(index, '')}
                       dropzoneProps={{
                         maxSize: maxUploadSize,
@@ -571,7 +571,8 @@ const EditContentForm = ({
                         />
                       </ConditionalTooltip>
                       <Hide hide={getFieldValidation(index, 'metadataVerification') !== 'success'}>
-                        <CheckCircleIcon noVerticalAlign color={green} />
+                        <CheckCircleIcon color={green} />
+                        {/* TODO: Check the above still looks correct */}
                       </Hide>
                     </FormGroup>
                   </Hide>
@@ -581,7 +582,7 @@ const EditContentForm = ({
           </Tbody>
         ),
       )}
-    </TableComposable>
+    </Table>
   );
 };
 

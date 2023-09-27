@@ -6,9 +6,11 @@ import {
   Flex,
   FlexItem,
   InputGroup,
-  SelectVariant,
   TextInput,
+  InputGroupItem,
+  Icon,
 } from '@patternfly/react-core';
+import { SelectVariant } from '@patternfly/react-core/deprecated';
 import DropdownSelect from '../../../components/DropdownSelect/DropdownSelect';
 import { FilterIcon, SearchIcon } from '@patternfly/react-icons';
 import { global_BackgroundColor_100, global_secondary_color_100 } from '@patternfly/react-tokens';
@@ -182,10 +184,12 @@ const ContentListFilters = ({
               ouiaId='filter_search'
               placeholder='Filter by name/url'
               value={searchQuery}
-              onChange={(value) => setSearchQuery(value)}
+              onChange={(_event, value) => setSearchQuery(value)}
               className={classes.searchInput}
             />
-            <SearchIcon size='sm' className={classes.searchIcon} />
+            <Icon size='sm'>
+              <SearchIcon className={classes.searchIcon} />
+            </Icon>
           </Flex>
         );
       case 'Version':
@@ -248,20 +252,24 @@ const ContentListFilters = ({
     <Flex>
       <FlexItem>
         <InputGroup>
-          <FlexItem>
-            <DropdownSelect
-              toggleId='filterSelectionDropdown'
-              ouiaId='filter_type'
-              isDisabled={isLoading}
-              options={filters}
-              variant={SelectVariant.single}
-              selectedProp={filterType}
-              setSelected={setFilterType}
-              placeholderText='filter'
-              toggleIcon={<FilterIcon />}
-            />
-          </FlexItem>
-          <FlexItem>{Filter}</FlexItem>
+          <InputGroupItem>
+            <FlexItem>
+              <DropdownSelect
+                toggleId='filterSelectionDropdown'
+                ouiaId='filter_type'
+                isDisabled={isLoading}
+                options={filters}
+                variant={SelectVariant.single}
+                selectedProp={filterType}
+                setSelected={setFilterType}
+                placeholderText='filter'
+                toggleIcon={<FilterIcon />}
+              />
+            </FlexItem>
+          </InputGroupItem>
+          <InputGroupItem>
+            <FlexItem>{Filter}</FlexItem>
+          </InputGroupItem>
         </InputGroup>
       </FlexItem>
       <FlexItem className={classes.repositoryActions}>

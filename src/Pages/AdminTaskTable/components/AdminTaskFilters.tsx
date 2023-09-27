@@ -6,9 +6,11 @@ import {
   Flex,
   FlexItem,
   InputGroup,
-  SelectVariant,
   TextInput,
+  InputGroupItem,
+  Icon,
 } from '@patternfly/react-core';
+import { SelectVariant } from '@patternfly/react-core/deprecated';
 import DropdownSelect from '../../../components/DropdownSelect/DropdownSelect';
 import { FilterIcon, SearchIcon } from '@patternfly/react-icons';
 import { global_BackgroundColor_100, global_secondary_color_100 } from '@patternfly/react-tokens';
@@ -109,10 +111,12 @@ const AdminTaskFilters = ({ isLoading, setFilterData, filterData }: Props) => {
               ouiaId='filter_account_id'
               placeholder='Filter by account ID'
               value={accountId}
-              onChange={(value) => setAccountId(value)}
+              onChange={(_event, value) => setAccountId(value)}
               className={classes.searchInput}
             />
-            <SearchIcon size='sm' className={classes.searchIcon} />
+            <Icon size='sm'>
+              <SearchIcon className={classes.searchIcon} />
+            </Icon>
           </Flex>
         );
       case 'Org ID':
@@ -124,10 +128,12 @@ const AdminTaskFilters = ({ isLoading, setFilterData, filterData }: Props) => {
               ouiaId='filter_org_id'
               placeholder='Filter by org ID'
               value={orgId}
-              onChange={(value) => setOrgId(value)}
+              onChange={(_event, value) => setOrgId(value)}
               className={classes.searchInput}
             />
-            <SearchIcon size='sm' className={classes.searchIcon} />
+            <Icon size='sm'>
+              <SearchIcon className={classes.searchIcon} />
+            </Icon>
           </Flex>
         );
       case 'Status':
@@ -153,20 +159,24 @@ const AdminTaskFilters = ({ isLoading, setFilterData, filterData }: Props) => {
     <Flex>
       <FlexItem>
         <InputGroup>
-          <FlexItem>
-            <DropdownSelect
-              toggleId='filterSelectionDropdown'
-              ouiaId='filter_type'
-              isDisabled={isLoading}
-              options={filters}
-              variant={SelectVariant.single}
-              selectedProp={filterType}
-              setSelected={setFilterType}
-              placeholderText='filter'
-              toggleIcon={<FilterIcon />}
-            />
-          </FlexItem>
-          <FlexItem>{Filter}</FlexItem>
+          <InputGroupItem>
+            <FlexItem>
+              <DropdownSelect
+                toggleId='filterSelectionDropdown'
+                ouiaId='filter_type'
+                isDisabled={isLoading}
+                options={filters}
+                variant={SelectVariant.single}
+                selectedProp={filterType}
+                setSelected={setFilterType}
+                placeholderText='filter'
+                toggleIcon={<FilterIcon />}
+              />
+            </FlexItem>
+          </InputGroupItem>
+          <InputGroupItem>
+            <FlexItem>{Filter}</FlexItem>
+          </InputGroupItem>
         </InputGroup>
       </FlexItem>
       <Hide hide={!(accountId !== '' || orgId !== '' || selectedStatuses.length)}>

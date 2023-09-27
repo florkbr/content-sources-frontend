@@ -4,7 +4,7 @@ import {
   BanIcon,
   ClockIcon,
 } from '@patternfly/react-icons';
-import { Flex, FlexItem, Spinner } from '@patternfly/react-core';
+import { Flex, FlexItem, Icon, Spinner } from '@patternfly/react-core';
 import StatusText from '../../../components/StatusText/StatusText';
 import {
   global_danger_color_100,
@@ -48,7 +48,9 @@ const StatusIcon = ({ status }: Props) => {
       return (
         <Flex alignContent={{ default: 'alignContentCenter' }} direction={{ default: 'row' }}>
           <FlexItem spacer={{ default: 'spacerSm' }}>
-            <ExclamationCircleIcon color={red} />
+            <Icon color={red}>
+              <ExclamationCircleIcon />
+            </Icon>
           </FlexItem>
           <FlexItem>
             <StatusText color='green'>Failed</StatusText>
@@ -81,7 +83,9 @@ const StatusIcon = ({ status }: Props) => {
       return (
         <Flex alignContent={{ default: 'alignContentCenter' }} direction={{ default: 'row' }}>
           <FlexItem spacer={{ default: 'spacerSm' }}>
-            <ClockIcon color={gold} />
+            <Icon color={gold}>
+              <ClockIcon />
+            </Icon>
           </FlexItem>
           <FlexItem>
             <StatusText color='blue'>Pending</StatusText>
